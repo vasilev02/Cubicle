@@ -4,13 +4,9 @@ const config = require("./config/config");
 
 const app = express();
 
-app.engine('hbs', handlebars({
-    extname: 'hbs'
-}));
+const expressConfig = require("./config/express")
+expressConfig(app);
 
-app.set("view engine", "hbs");
-
-app.use(express.static("public"))
 
 app.get("/", (req, res) => {
     res.render('home', {layout: false});
