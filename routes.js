@@ -9,7 +9,7 @@ router.use(productController);
 router.use("/about", aboutController);
 
 router.get("*", (req, res) => {
-    res.render("404", {layout: false});
+    res.render("404", {title: "Not found"});
 });
 
 module.exports = router;
