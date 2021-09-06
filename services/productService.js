@@ -8,6 +8,10 @@ function getAll(){
     return productsData;
 }
 
+function getProductById(id){
+    return productsData.find(p => p.id === id);
+}
+
 
 function create(data){
 
@@ -32,5 +36,6 @@ function create(data){
 
 module.exports = {
     getAll,
+    getProductById,
     create
 }

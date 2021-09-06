@@ -22,7 +22,8 @@ router.post("/create", (req, res) => {
 });
 
 router.get("/details/:productId", (req, res) => {
-  res.render("details", { title: "Product details" });
+  const product = productService.getProductById(req.params.productId);
+  res.render("details", { title: "Product details", product });
 });
 
 module.exports = router;
