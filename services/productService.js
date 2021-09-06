@@ -2,6 +2,7 @@ const uniqid = require("uniqid");
 const Cube = require("../models/Cube");
 const fs = require('fs');
 const path = require('path');
+const productData = require("../data/productData");
 const productsData = require('../config/products.json');
 const { search } = require("../controllers/productController");
 
@@ -39,15 +40,7 @@ function create(data){
         data.difficultyLevel
       );
 
-      productsData.push(cube);
-
-      fs.writeFile(path.join(__dirname,"/../config/products.json"), JSON.stringify(productsData), (err) => {
-          if(err){
-              console.log(err);
-              return;
-          }
-      });
-
+      productData.create(cube);
 }
 
 module.exports = {
