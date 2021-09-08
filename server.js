@@ -8,6 +8,9 @@ const app = express();
 const expressConfig = require("./config/express")
 expressConfig(app);
 
+const mongoose = require('./config/mongoose');
+mongoose(app);
+
 app.use(routes);
 
 
