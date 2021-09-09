@@ -34,7 +34,7 @@ router.get("/details/:productId", (req, res) => {
 
 router.get("/details/:productId/attach", async (req, res) => {
   let product = await productService.getProductById(req.params.productId);
-  let accessories = await accessoryService.getAll();
+  let accessories = await accessoryService.getAllNotIncluded(product.accessories);
 
   res.render("attachAccessory", { title: "Attach", product, accessories });
 });

@@ -15,9 +15,6 @@ router.post("/create", validateAccessory, (req, res) => {
     accessoryService.create(req.body).then(() => res.redirect("/"));
 });
 
-
-
-
 function validateAccessory(req, res, next) {
   let isValid = true;
 

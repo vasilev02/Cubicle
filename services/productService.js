@@ -3,7 +3,7 @@ const { search } = require("../controllers/productController");
 const Accessory = require("../models/Accessory");
 
 async function getAll(query) {
-  let products = await Cube.find({}).lean();
+  let products = await (await Cube.find({}).lean());
 
   if (query.search) {
     products = products.filter((p) =>
