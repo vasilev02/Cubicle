@@ -1,11 +1,16 @@
 const { Router } = require("express");
 const productService = require("../services/productService");
+const accessoryService = require("../services/accessoryService");
 
 const router = Router();
 
 router.get("/", (req, res) => {
-  const products = productService.getAll(req.query);
-  res.render("home", { title: "Home", products });
+  productService
+    .getAll(req.query)
+    .then((products) => {
+      res.render("home", { title: "Browse", products });
+    })
+    .catch(() => res.status(500).end());
 });
 
 router.get("/create", (req, res) => {
@@ -19,9 +24,27 @@ router.post("/create", validateProduct, (req, res) => {
 });
 
 router.get("/details/:productId", (req, res) => {
-  const product = productService.getProductById(req.params.productId);
-  res.render("details", { title: "Product details", product });
+  productService
+    .getProductAndAccessories(req.params.productId)
+    .then((product) => {
+      res.render("details", { title: "Product details", product });
+    })
+    .catch(() => res.status(500).end());
 });
+
+router.get("/details/:productId/attach", async (req, res) => {
+  let product = await productService.getProductById(req.params.productId);
+  let accessories = await accessoryService.getAll();
+
+  res.render("attachAccessory", { title: "Attach", product, accessories });
+});
+
+router.post("/details/:productId/attach", async (req, res) => {
+  productService.attachAccessory(req.params.productId, req.body.accessory)
+  .then(() => res.redirect(`/details/${req.params.productId}`));
+});
+
+
 
 function validateProduct(req, res, next) {
   let isValid = true;

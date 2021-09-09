@@ -1,39 +1,55 @@
 const Cube = require("../models/Cube");
 const { search } = require("../controllers/productController");
+const Accessory = require("../models/Accessory");
 
-function getAll(query){
+async function getAll(query) {
+  let products = await Cube.find({}).lean();
 
-    let products = Cube.getAll();
+  if (query.search) {
+    products = products.filter((p) =>
+      p.name.toLowerCase().includes(query.search)
+    );
+  }
 
-    if(query.search){
-        products = products.filter(p => p.name.toLowerCase().includes(query.search));
-    }
+  if (query.from) {
+    products = products.filter((p) => Number(p.level) >= query.from);
+  }
 
-    if(query.from){
-        products = products.filter(p => Number(p.level) >= query.from);
-    }
+  if (query.to) {
+    products = products.filter((p) => Number(p.level) <= query.to);
+  }
 
-    if(query.to){
-        products = products.filter(p => Number(p.level) <= query.to);
-    }
-
-    return products;
+  return products;
 }
 
-function getProductById(id){
-    return Cube.getOne(id);
+async function getProductById(id) {
+  let cube = await Cube.findById(id).lean();
+  return cube;
 }
 
+async function getProductAndAccessories(id) {
+  let cube = await Cube.findById(id).populate("accessories").lean();
+  return cube;
+}
 
-function create(data){
+function create(data) {
+  let cube = new Cube(data);
+  return cube.save();
+}
 
-    let cube = new Cube(data);
+async function attachAccessory(productId, accessoryId) {
+  let cube = await Cube.findById(productId);
+  let accessory = await Accessory.findById(accessoryId);
 
-      cube.save();
+  cube.accessories.push(accessory);
+  cube.save();
+  
 }
 
 module.exports = {
-    getAll,
-    getProductById,
-    create
-}
+  getAll,
+  getProductById,
+  create,
+  attachAccessory,
+  getProductAndAccessories
+};
