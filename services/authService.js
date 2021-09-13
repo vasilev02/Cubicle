@@ -15,7 +15,6 @@ async function register(username, password) {
 }
 
 async function login(username, password) {
-    
     const user = await User.findOne({username});
 
     if(!user){
@@ -30,7 +29,6 @@ async function login(username, password) {
 
     let token = jwt.sign({_id: user._id}, SECRET);
     return token;
-
   }
 
 module.exports = {

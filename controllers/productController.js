@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const productService = require("../services/productService");
 const accessoryService = require("../services/accessoryService");
+const isAuthenticated = require("../middlewares/isAuthenticated")
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/",isAuthenticated, (req, res) => {
   productService
     .getAll(req.query)
     .then((products) => {
@@ -13,7 +14,7 @@ router.get("/", (req, res) => {
     .catch(() => res.status(500).end());
 });
 
-router.get("/create", (req, res) => {
+router.get("/create",isAuthenticated, (req, res) => {
   res.render("create", { title: "Create" });
 });
 
