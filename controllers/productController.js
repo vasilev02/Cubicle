@@ -23,6 +23,12 @@ router.post("/create", validateProduct, (req, res) => {
   res.redirect("/");
 });
 
+router.get("/delete/:productId", (req, res) => {
+  const id = req.params.productId;
+  productService.deleteProduct(id);
+  res.redirect("/");
+});
+
 router.get("/details/:productId", (req, res) => {
   productService
     .getProductAndAccessories(req.params.productId)
@@ -35,6 +41,14 @@ router.get("/details/:productId", (req, res) => {
 router.get("/details/:productId/attach", async (req, res) => {
   let product = await productService.getProductById(req.params.productId);
   let accessories = await accessoryService.getAllNotIncluded(product.accessories);
+
+  res.render("attachAccessory", { title: "Attach", product, accessories });
+});
+
+router.get("/details/:productId/unattach/:accessoryId", async (req, res) => {
+  console.log("inside");
+  let product = await productService.getProductById(req.params.productId);
+  let accessories = await accessoryService.getProductById(req.params.accessoryId);
 
   res.render("attachAccessory", { title: "Attach", product, accessories });
 });

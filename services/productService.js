@@ -37,6 +37,10 @@ function create(data) {
   return cube.save();
 }
 
+async function deleteProduct(id) {
+  await Cube.findByIdAndDelete(id);
+}
+
 async function attachAccessory(productId, accessoryId) {
   let cube = await Cube.findById(productId);
   let accessory = await Accessory.findById(accessoryId);
@@ -51,5 +55,6 @@ module.exports = {
   getProductById,
   create,
   attachAccessory,
-  getProductAndAccessories
+  getProductAndAccessories,
+  deleteProduct
 };
