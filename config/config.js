@@ -1,6 +1,7 @@
 const config = {
     development: {
         PORT: 5000,
+        SECRET: "somesecret",
     },
     production: {
         PORT: 80,

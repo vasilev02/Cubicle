@@ -7,6 +7,18 @@ router.get("/login", (req, res) => {
     res.render("login", {title: "Login"});
 });
 
+router.post("/login", async (req, res) => {
+    const {username, password} = req.body;
+
+    try {
+        const token = await authService.login(username, password);
+        res.cookie('USER_SESSION', token);
+        res.redirect('/');
+    } catch (error) {
+        res.render("login", {error});
+    }
+});
+
 router.get("/register", (req, res) => {
     res.render("register", {title: "Register"});
 });
