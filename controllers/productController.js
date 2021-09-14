@@ -24,7 +24,17 @@ router.post("/create", validateProduct, (req, res) => {
   res.redirect("/");
 });
 
-router.get("/delete/:productId", (req, res) => {
+router.get("/delete/:productId", async (req, res) => {
+  const cube = await productService.getProductById(req.params.productId);
+  res.render("delete", {cube});
+});
+
+router.get("/delete/:productId", async (req, res) => {
+  const cube = await productService.getProductById(req.params.productId);
+  res.render("delete", {cube});
+});
+
+router.post("/delete/:productId", (req, res) => {
   const id = req.params.productId;
   productService.deleteProduct(id);
   res.redirect("/");
@@ -57,6 +67,18 @@ router.get("/details/:productId/unattach/:accessoryId", async (req, res) => {
 router.post("/details/:productId/attach", async (req, res) => {
   productService.attachAccessory(req.params.productId, req.body.accessory)
   .then(() => res.redirect(`/details/${req.params.productId}`));
+});
+
+router.get("/details/:productId/edit", async (req, res) => {
+  const cube = await productService.getProductById(req.params.productId);
+  res.render("edit", {cube});
+});
+
+router.post('/details/:productId/edit', isAuthenticated, validateProduct, (req, res) => {
+  productService.updateOne(req.params.productId, req.body)
+      .then(response => {
+          res.redirect(`/details/${req.params.productId}`);
+      });
 });
 
 
